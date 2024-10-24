@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SECRET</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Secret</h1>
+        <div class="caixa">
+            <div class="input1">
+                <textarea type="text" id="mensagem" placeholder="Escreva uma mensagem"></textarea>
+                <button id="criptografar-btn">Criptografar</button>
+            </div>
+            <div class="input2">
+                <textarea type="text" id="mensagem-criptografada" placeholder="Mensagem criptografada"></textarea>
+                <button id="descriptografar-btn">Descriptografar</button>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+<script>
+    const chaveApi = 'criptoGabiLele22070510'; // Chave de API usada para autenticação
+    const urlBase = 'https://03a190e0-0613-405e-af29-16a385539d5d-00-2ie7mfi6fgtsi.janeway.replit.dev/api'; // Altere para o endereço correto do Replit
+
+    document.getElementById('criptografar-btn').addEventListener('click', () => {
+        const mensagem = document.getElementById('mensagem').value;
+
+        fetch(`${urlBase}/criptografar`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-api-key': chaveApi
+            },
+            body: JSON.stringify({ mensagem })
+        })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('mensagem-criptografada').value = data.mensagemCriptografada;
+                document.getElementById('mensagem').value = '';
+            })
+            .catch(error => console.error('Erro ao criptografar:', error));
+    });
+
+    document.getElementById('descriptografar-btn').addEventListener('click', () => {
+        const mensagemCriptografada = document.getElementById('mensagem-criptografada').value;
+
+        fetch(`${urlBase}/descriptografar`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-api-key': chaveApi
+            },
+            body: JSON.stringify({ mensagemCriptografada })
+        })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('mensagem').value = data.mensagemOriginal;
+                document.getElementById('mensagem-criptografada').value = '';
+            })
+            .catch(error => console.error('Erro ao descriptografar:', error));
+    });
+
+</script>
+
+</html>
